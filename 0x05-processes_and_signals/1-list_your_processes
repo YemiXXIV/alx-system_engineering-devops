@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
-# Display the list of current processes in a user-oriented format
-ps -aux
+# display the list of current processes in a user-oriented format
+
+ps -auxf
 
