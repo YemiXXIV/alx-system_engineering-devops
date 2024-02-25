@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# This is a bash script that displays content of the current
+# directory in a list format
+
+for file in *; do
+    # Check if the file is not hidden
+    if [[ $file != .* ]]; then
+        # Extract the part after the first dash
+        name=$(echo "$file" | cut -d'-' -f2-)
+        echo "$name"
+    fi
+done
