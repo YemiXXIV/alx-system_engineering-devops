@@ -1,4 +1,6 @@
-# install 2.1.0 version of flask from pip
+#!/usr/bin/pup
+# Install Flask version (2.1.0)
+
 package { 'flask':
   ensure   => '2.1.0',
   provider => 'pip',
