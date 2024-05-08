@@ -1,19 +1,24 @@
-# install and configure Nginx
+# Setup New Ubuntu server with nginx
+
+exec { 'update system':
+        command => '/usr/bin/apt-get update',
+}
+
 package { 'nginx':
-  ensure => '1.18.0',
+	ensure => 'installed',
+	require => Exec['update system']
 }
 
-exec { 'set_hello_world':
-  command => 'echo "Hello World!" | sudo tee /var/www/html/index.nginx-debian.html'
-  require => Package['nginx'],
+file {'/var/www/html/index.html':
+	content => 'Hello World!'
 }
 
-exec { 'set_redirect':
-  command => "sudo sed -i '\\#root /var/www/html;#a\\\\tlocation /redirect_me/ {\\n\\t\\treturn 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;\\n\\t}' /etc/nginx/sites-available/default",
-  require => require => Package['nginx'],
+exec {'redirect_me':
+	command => 'sed -i "24i\	rewrite ^/redirect_me https://www.youtube.com/watch?v=QH2-TGUlwu4 permanent;" /etc/nginx/sites-available/default',
+	provider => 'shell'
 }
 
-exec { 'restart nginx':
-  command => 'sudo service nginx restart',
-  require => Exec['set_redirect'],
+service {'nginx':
+	ensure => running,
+	require => Package['nginx']
 }
