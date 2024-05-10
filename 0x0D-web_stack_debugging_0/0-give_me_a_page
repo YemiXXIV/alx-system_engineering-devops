@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+# Script containing aache server fix
+sudo service apache2 start
