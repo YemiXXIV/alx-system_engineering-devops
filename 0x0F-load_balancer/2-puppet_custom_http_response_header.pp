@@ -1,21 +1,16 @@
-# This Setup New Ubuntu server with nginx and adds a custom HTTP header
-
-exec { 'updated system':
-        command => '/usr/bin/apt-get update',
-}
-
+# install and configure Nginx
 package { 'nginx':
-	ensure => 'installed',
-	require => Exec['updated system']
+  ensure => 'installed',
 }
 
-file {'/var/www/html/index.html':
-	content => 'Hello World!'
+exec { 'set_hello_world':
+  command => 'echo "Hello World!" | sudo tee /var/www/html/index.nginx-debian.html'
+  require => Package['nginx'],
 }
 
-exec {'redirect_me':
-	command => 'sed -i "24i\	rewrite ^/redirect_me https://th3-gr00t.tk/ permanent;" /etc/nginx/sites-available/default',
-	provider => 'shell'
+exec { 'set_redirect':
+  command => "sudo sed -i '\\#root /var/www/html;#a\\\\tlocation /redirect_me/ {\\n\\t\\treturn 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;\\n\\t}' /etc/nginx/sites-available/default",
+  require => require => Package['nginx'],
 }
 
 exec {'HTTP header':
@@ -23,7 +18,7 @@ exec {'HTTP header':
 	provider => 'shell'
 }
 
-service {'nginx':
-	ensure => running,
-	require => Package['nginx']
+exec { 'restart nginx':
+  command => 'sudo service nginx restart',
+  require => Exec['set_redirect'],
 }
