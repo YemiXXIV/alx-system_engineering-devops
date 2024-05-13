@@ -1,28 +1,30 @@
-# install and configure Nginx
+# This Setup New Ubuntu server with nginx
+# and add a custom HTTP header
+
+exec { 'update system':
+        command => '/usr/bin/apt-get update',
+}
+
 package { 'nginx':
-  ensure => 'installed',
+	ensure => 'installed',
+	require => Exec['update system']
 }
 
-exec { 'set_hello_world':
-  command => 'echo "Hello World!" | sudo tee /var/www/html/index.ngin\
-x-debian.html'
-  require => Package['nginx'],
+file {'/var/www/html/index.html':
+	content => 'Hello World!'
 }
 
-exec { 'set_redirect':
-  command => "sudo sed -i '\\#root /var/www/html;#a\\\\tlocation /red\
-irect_me/ {\\n\\t\\treturn 301 https://www.youtube.com/watch?v=QH2-TG\
-Ulwu4;\\n\\t}' /etc/nginx/sites-available/default",
-  require => require => Package['nginx'],
+exec {'redirect_me':
+	command => 'sed -i "24i\	rewrite ^/redirect_me https://th3-gr00t.tk/ permanent;" /etc/nginx/sites-available/default',
+	provider => 'shell'
 }
 
 exec {'HTTP header':
-        command => 'sed -i "25i\        add_header X-Served-By \$host\
-name;" /etc/nginx/sites-available/default',
-        provider => 'shell'
+	command => 'sed -i "25i\	add_header X-Served-By \$hostname;" /etc/nginx/sites-available/default',
+	provider => 'shell'
 }
 
-exec { 'restart nginx':
-  command => 'sudo service nginx restart',
-  require => Exec['set_redirect'],
+service {'nginx':
+	ensure => running,
+	require => Package['nginx']
 }
