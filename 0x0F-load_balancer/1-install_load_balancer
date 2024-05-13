@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+# configuring a load balancer to manage traffic between servers
+
+sudo apt-get -y update
+sudo apt-get -y install haproxy
+
+sudo service haproxy start
+
+echo 'frontend theproxy
+	bind *:80
+	default_backend my_backend_servers
+
+backend my_backend_servers
+	balance roundrobin
+	server web1 52.87.220.178:80
+	server web2 54.209.217.90:80' | sudo tee -a /etc/haproxy/haproxy.cfg
+
+sudo service haproxy reload
