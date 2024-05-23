@@ -21,12 +21,14 @@ if __name__ == "__main__":
     employee = requests.get(url_api + "users/{}".format(employee_id)).json()
 
     # To get to-do list for the employee using the employee ID
-    values = {"userId" : employee_id}
+    values = {"userId": employee_id}
     todo_list = requests.get(url_api + "todos", values).json()
 
-    completed =[item.get("title") for item in todo_list if item.get("completed") is True]
+    completed = [
+        a.get("title") for a in todo_list if a.get("completed") is True]
 
     # Print employee's name and number of tasks completed
-    print("Employee {} is done with tasks({}/{}):".format(employee.get("name"), len(completed), len(todo_list)))
+    print("Employee {} is done with tasks({}/{}):".format(
+        employee.get("name"), len(completed), len(todo_list)))
 
     [print("\t {}".format(complete)) for complete in completed]
