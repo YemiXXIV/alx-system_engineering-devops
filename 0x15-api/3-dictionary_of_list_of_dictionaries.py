@@ -1,8 +1,10 @@
 #!/usr/bin/python3
 """
-This script fetches the to-do list information of all employees and exports the data to a JSON file.
+This script fetches the to-do list information of all employees and
+exports the data to a JSON file.
 
-The script retrieves data from the provided API and exports all tasks for each employee to a JSON file in the specified format.
+The script retrieves data from the provided API and exports all
+tasks for each employee to a JSON file in the specified format.
 """
 
 import json
