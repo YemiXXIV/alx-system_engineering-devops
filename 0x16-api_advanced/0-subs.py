@@ -1,13 +1,14 @@
 #!/usr/bin/python3
 """
-module to return the number of subscribers for a subreddit
+Script that queries subscribers on a given Reddit subreddit.
 """
+
 import requests
 
 
 def number_of_subscribers(subreddit):
     """
-    number of subscribers for a subreddit
+    Return number of subscribers on a given subreddit.
     """
     url = "https://www.reddit.com/r/{}/about.json".format(subreddit)
     headers = {"User-Agent": "Mozilla/5.0"}
