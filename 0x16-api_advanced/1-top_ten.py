@@ -13,7 +13,8 @@ def top_ten(subreddit):
     headers = {"User-Agent": "my bot 0.1"}
 
     try:
-        response = requests.get(url, headers=headers, allow_redirects=False)
+        response = requests.get(url, headers=headers,
+                                allow_redirects=False)
         if response.status_code == 200:
             response_data = response.json()
             if 'data' in response_data and 'children' in response_data['data']:
