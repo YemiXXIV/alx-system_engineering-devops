@@ -7,18 +7,25 @@ import requests
 
 def number_of_subscribers(subreddit):
     """
-    Return number of subscribers on a given subreddit.
+    Return the number of subscribers on a given subreddit.
     """
-    url = "https://www.reddit.com/r/{}/about.json".format(subreddit)
+    url = f"https://www.reddit.com/r/{subreddit}/about.json"
     headers = {
-        "User-Agent": "linux:0x16.api.advanced:v1.0.0 (by /u/bdov_)"
+        "User-Agent": "my bot 0.1"
     }
+
     try:
-        response = requests.get(url, headers=headers, allow_redirects=False)
+        response = requests.get(url, headers=headers,
+                                allow_redirects=False)
         if response.status_code == 200:
-            results = response.json().get("data")
-            if results:
-                return results.get("subscribers", 0)
-        return 0
+            response_data = response.json()
+            if 'data' in response_data and 'subscribers' in response_data['data']:
+                return response_data['data']['subscribers']
+            else:
+                return 0
+        else:
+            return 0
     except requests.RequestException:
+        return 0
+    except ValueError:
         return 0
